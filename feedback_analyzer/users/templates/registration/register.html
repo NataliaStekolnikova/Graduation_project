@@ -9,10 +9,14 @@
         {% csrf_token %}
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
-        <br>
+        {% if form.email.errors %}
+            <span style="color: red">{{ form.email.errors.as_text }}</span><br>
+        {% endif %}
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
-        <br>
+        {% if form.password1.errors %}
+            <span style="color: red">{{ form.password1.errors.as_text }}</span><br>
+        {% endif %}
         <input type="submit" value="Register">
     </form>
 </body>
