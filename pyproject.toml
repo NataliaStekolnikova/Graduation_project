@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "graduation-project"
+version = "0.1.0"
+description = ""
+authors = ["NataliaStekolnikova <natalia.a.stekolnikova@gmail.com>"]
+readme = "README.md"
+packages = [{include = "feedback_analyzer"}]
+
+[tool.poetry.dependencies]
+python = "^3.11.3"
+django = "^4.2.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
