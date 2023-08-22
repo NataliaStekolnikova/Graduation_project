@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .sortable {
+        cursor: pointer;
+    }
+
+    .sortable::after {
+        content: " ▼";
+        opacity: 0.5;
+        font-size: 0.7em;
+        margin-left: 5px;
+    }
+
+    .sortable.asc::after {
+        content: " ▲";
+        opacity: 1;
+        font-size: 0.7em;
+        margin-left: 5px;
+    }
+
+    .sortable.desc::after {
+        content: " ▼";
+        opacity: 1;
+        font-size: 0.7em;
+        margin-left: 5px;
+    }
+</style>
+
+{% if user.is_authenticated %}
+	<div class="row">
+		<table class="table" style="border: 1px solid black; border-collapse: collapse;">
+			<thead>
+				<tr>
+					<th class="sortable" data-col="0">Title</th>
+					<th class="sortable" data-col="1">Source</th>
+					<th class="sortable" data-col="2">Published</th>
+					<th class="sortable" data-col="3">Scraped</th>
+				</tr>
+			</thead>
+			<tbody id="articleTableBody">
+				{% for a in articles %}
+				<tr>
+					<td>{{ a.title }}</td>
+					<td>{{ a.source }}</td>
+					<td>{{ a.published }}</td>
+					<td>{{ a.created_at }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+<script>
+    const headers = document.querySelectorAll('.sortable');
+    headers.forEach(header => {
+        header.addEventListener('click', () => sortTable(header.getAttribute('data-col')));
+    });
+
+    function sortTable(n) {
+        let table, rows, switching, i, x, y, shouldSwitch, dir, switchCount = 0;
+        table = document.getElementById("articleTableBody");
+        switching = true;
+
+        // Set the sorting direction to ascending
+        dir = "asc";
+
+        // Toggle the sorting direction
+        if (table.getAttribute("data-sort-by") === n.toString()) {
+            if (table.getAttribute("data-sort-dir") === "asc") {
+                dir = "desc";
+            }
+        }
+
+        table.setAttribute("data-sort-by", n);
+        table.setAttribute("data-sort-dir", dir);
+
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 0; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[n];
+                y = rows[i + 1].getElementsByTagName("td")[n];
+                let xValue = (n === 0) ? x.innerText.toLowerCase() : x.innerHTML.toLowerCase();
+                let yValue = (n === 0) ? y.innerText.toLowerCase() : y.innerHTML.toLowerCase();
+
+                if (dir === "asc") {
+                    if (xValue > yValue) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir === "desc") {
+                    if (xValue < yValue) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchCount++;
+            } else {
+                if (switchCount === 0 && dir === "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+
+        // Update sorting order indicator in the table headers
+        headers.forEach(header => {
+            header.classList.remove("asc", "desc");
+        });
+        headers[n].classList.add(dir);
+    }
+</script>
+
+{% else %}
+
+{% endif %}
+{% endblock content %}
