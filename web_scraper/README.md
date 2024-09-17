@@ -1,11 +1,9 @@
 Solution comprises several services:
-1. web-scraper - a web-application that authentificate the user and show him news.
-   # cmd
-   # D:
-   # cd "D:\КУРС Python\Graduation_project"
+1. web-scraper - a web-application.
    # # mkdir web_scraper
-   # cd web_scraper
-   # # pipenv install requests bs4 lxml django celery gevent
+   # # cd web_scraper
+   # pipenv install requests bs4 lxml django celery gevent
+   # pipenv shell
    # # django-admin startproject web_scraper .
    # # python manage.py createsuperuser
    # # python manage.py makemigrations
@@ -15,17 +13,13 @@ Solution comprises several services:
    # # python manage.py startapp scraping
    # # python manage.py makemigrations
    # # python manage.py migrate
-3. celery - a standard task queue implementation for Python web applications used to asynchronously execute "news scraping" tasks according to a defined schedule.
+3. celery - a standard task queue implementation for Python web applications used to asynchronously execute scraping tasks according to a defined schedule.
    # cmd
    # D:
    # cd "D:\КУРС Python\Graduation_project\web_scraper"
-   # celery -A web_scraper.celery worker -l INFO -P gevent
-   # cmd 
-   # D:
-   # cd "D:\КУРС Python\Graduation_project\web_scraper"
-   # celery -A web_scraper beat -l INFO
+   # celery -A web-scraper worker -l INFO -P gevent
+   # celery -A web-scraper beat -l INFO
 4. RabbitMQ - a message broker used by celery.
-   # cmd
    # cd "C:\Program Files\RabbitMQ Server\rabbitmq_server-3.12.2\sbin"
-   # rabbitmqctl stop
+   # rabbitmqctl-shutdown
    # rabbitmq-server
