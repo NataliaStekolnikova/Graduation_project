@@ -1,1 +1,1 @@
-# Graduation_project
+# News Scraper web-application
